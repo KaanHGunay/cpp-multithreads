@@ -1,28 +1,36 @@
 #include <iostream>
 #include <thread>
 #include <mutex>
+#include <fstream>
 
-std::mutex mu;
+class LogFile {
+    std::mutex mutex;
+    std::ofstream ofstream;
 
-// Printlerin farklı threadlerde karışmaması için
-void shared_print(std::string message, int id) {
-    std::lock_guard<std::mutex> guard(mu);
-    // mu.lock();
-    std::cout << message << id << std::endl;
-    // mu.unlock();
-}
+public:
+    LogFile() {
+        ofstream.open("log.txt");  // Ofstream'e threadlerin hepsi birlikte ulaşmaması için class içine tanımlayarak
+        // işlemler yapılır.
+    }
+    void shared_print(std::string id, int value) {
+        std::lock_guard<std::mutex> lockGuard(mutex);
+        ofstream << "From " << id << " : " << value << std::endl;
+    }
+};
 
-void myFunc() {
+void myFunc(LogFile& logFile) {
     for (int i = 0; i > -10; i--) {
-        shared_print("Call from t1:", i);
+        logFile.shared_print("Call from t1:", i);
     }
 }
 
 int main() {
-    std::thread t1(myFunc);
+    LogFile logFile;
+
+    std::thread t1(myFunc, std::ref(logFile));
 
     for (int i = 0; i < 10; ++i) {
-        shared_print("Call from Main:", i);
+        logFile.shared_print("Call from Main:", i);
     }
 
     t1.join();
