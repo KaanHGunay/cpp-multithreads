@@ -1,23 +1,30 @@
 #include <iostream>
 #include <thread>
+#include <mutex>
 
-void myFunc() {
-    std::cout << "Test" << std::endl;
+std::mutex mu;
+
+// Printlerin farklı threadlerde karışmaması için
+void shared_print(std::string message, int id) {
+    mu.lock();
+    std::cout << message << id << std::endl;
+    mu.unlock();
 }
 
-class F {
-public:
-    void operator()(const std::string& msg) {
-        for (int i = 0; i < 10; ++i) {
-            std::cout << "Class: " << msg  << std::endl;
-        }
+void myFunc() {
+    for (int i = 0; i > -10; i--) {
+        shared_print("Call from t1:", i);
     }
-};
+}
 
 int main() {
-    // Oversubscription
+    std::thread t1(myFunc);
 
-    std::cout << std::thread::hardware_concurrency() << std::endl; // Donanıma gelen thread sayısı
+    for (int i = 0; i < 10; ++i) {
+        shared_print("Call from Main:", i);
+    }
+
+    t1.join();
 
     return 0;
 }
