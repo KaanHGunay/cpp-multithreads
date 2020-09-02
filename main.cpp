@@ -8,14 +8,16 @@ void myFunc() {
 int main() {
     std::thread t1(myFunc);
 
-//    t1.join(); // Ana thread i beklet thread bitine kadar
-
-//    t1.detach(); // Ana thread den ayrı çıkaltır
-
-    if (t1.joinable()) { // Join olma durumuna göre joinle
-        t1.join();
+    try {  // Threadde herhangi bir hata olursa diğer kodları engellememesi için
+        for (int i = 0; i < 10; ++i) {
+            std::cout << "Main" << std::endl;
+        }
+    } catch (...) {
+        t1.join();  // Her durumda threadleri birleştirmek için
+        throw;
     }
 
+    t1.join();
 
     return 0;
 }
