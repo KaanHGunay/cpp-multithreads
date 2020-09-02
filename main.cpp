@@ -17,17 +17,9 @@ public:
 int main() {
     std::string msg = "Test";
     std::thread t1((F()), msg);  // MOST VEXING SYNTAX
+    std::thread t2 = std::move(t1);
 
-    try {  // Threadde herhangi bir hata olursa diğer kodları engellememesi için
-        for (int i = 0; i < 10; ++i) {
-            std::cout << "Main" << std::endl;
-        }
-    } catch (...) {
-        t1.join();  // Her durumda threadleri birleştirmek için
-        throw;
-    }
-
-    t1.join();
+    t2.join();
 
     return 0;
 }
