@@ -5,8 +5,19 @@ void myFunc() {
     std::cout << "Test" << std::endl;
 }
 
+class F {
+public:
+    void operator()() {
+        for (int i = 0; i < 10; ++i) {
+            std::cout << "Class" << std::endl;
+        }
+    }
+};
+
 int main() {
-    std::thread t1(myFunc);
+    F functor;
+
+    std::thread t1(functor);
 
     try {  // Threadde herhangi bir hata olursa diğer kodları engellememesi için
         for (int i = 0; i < 10; ++i) {
