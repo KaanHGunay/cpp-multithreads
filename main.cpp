@@ -19,9 +19,14 @@ public:
         ofstream << "From " << id << " : " << value << std::endl;
     }
     void shared_print2(const std::string& id, int value) {
-        std::lock(mutex, mutex2);
-        std::lock_guard<std::mutex> lockGuard(mutex, std::adopt_lock);
-        std::lock_guard<std::mutex> lockGuard2(mutex2, std::adopt_lock);
+        {
+            std::lock_guard<std::mutex> lockGuard(mutex, std::adopt_lock);
+            // ...
+        }
+        {
+            std::lock_guard<std::mutex> lockGuard2(mutex2, std::adopt_lock);
+            // ...
+        }
         ofstream << "From " << id << " : " << value << std::endl;
     }
 };
