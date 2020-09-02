@@ -6,9 +6,10 @@ std::mutex mu;
 
 // Printlerin farklı threadlerde karışmaması için
 void shared_print(std::string message, int id) {
-    mu.lock();
+    std::lock_guard<std::mutex> guard(mu);
+    // mu.lock();
     std::cout << message << id << std::endl;
-    mu.unlock();
+    // mu.unlock();
 }
 
 void myFunc() {
