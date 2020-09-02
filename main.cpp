@@ -15,16 +15,9 @@ public:
 };
 
 int main() {
-    std::string msg = "Test";
+    // Oversubscription
 
-    std::cout << std::this_thread::get_id() << std::endl;  // Parent thread id
-
-    std::thread t1((F()), msg);  // MOST VEXING SYNTAX
-    std::cout << t1.get_id() << std::endl;
-
-    std::thread t2 = std::move(t1);
-
-    t2.join();
+    std::cout << std::thread::hardware_concurrency() << std::endl; // Donanıma gelen thread sayısı
 
     return 0;
 }
