@@ -7,15 +7,16 @@ void myFunc() {
 
 class F {
 public:
-    void operator()() {
+    void operator()(const std::string& msg) {
         for (int i = 0; i < 10; ++i) {
-            std::cout << "Class" << std::endl;
+            std::cout << "Class: " << msg  << std::endl;
         }
     }
 };
 
 int main() {
-    std::thread t1((F()));  // MOST VEXING SYNTAX
+    std::string msg = "Test";
+    std::thread t1((F()), msg);  // MOST VEXING SYNTAX
 
     try {  // Threadde herhangi bir hata olursa diğer kodları engellememesi için
         for (int i = 0; i < 10; ++i) {
