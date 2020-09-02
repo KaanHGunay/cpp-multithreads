@@ -15,9 +15,7 @@ public:
 };
 
 int main() {
-    F functor;
-
-    std::thread t1(functor);
+    std::thread t1((F()));  // MOST VEXING SYNTAX
 
     try {  // Threadde herhangi bir hata olursa diğer kodları engellememesi için
         for (int i = 0; i < 10; ++i) {
